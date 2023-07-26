@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "main.h"
 
 /**
@@ -11,39 +10,47 @@ void print_buffer(char *b, int size)
 {
     int i, j;
 
-    if (size <= 0)
-    {
-        printf("\n");
-        return;
-    }
-
     for (i = 0; i < size; i += 10)
     {
-        printf("%08x: ", i);
-
-        for (j = 0; j < 10; j++)
-        {
-            if (i + j < size)
-                printf("%02x", b[i + j]);
-            else
-                printf("  ");
-
-            if (j % 2 != 0)
-                printf(" ");
-        }
+        _putchar('0' + ((i >> 24) & 0xFF));
+        _putchar('0' + ((i >> 16) & 0xFF));
+        _putchar('0' + ((i >> 8) & 0xFF));
+        _putchar('0' + (i & 0xFF));
+        _putchar(':');
+        _putchar(' ');
 
         for (j = 0; j < 10; j++)
         {
             if (i + j < size)
             {
-                if (b[i + j] >= 32 && b[i + j] <= 126)
-                    printf("%c", b[i + j]);
-                else
-                    printf(".");
+                _putchar('0' + ((unsigned char)b[i + j] >> 4));
+                _putchar('0' + ((unsigned char)b[i + j] & 0xF));
             }
+            else
+            {
+                _putchar(' ');
+                _putchar(' ');
+            }
+
+            if (j % 2 != 0)
+                _putchar(' ');
         }
 
-        printf("\n");
+        for (j = 0; j < 10; j++)
+        {
+            if (i + j >= size)
+                break;
+
+            if (b[i + j] >= 32 && b[i + j] <= 126)
+                _putchar(b[i + j]);
+            else
+                _putchar('.');
+        }
+
+        _putchar('\n');
     }
+
+    if (size <= 0)
+        _putchar('\n');
 }
 
