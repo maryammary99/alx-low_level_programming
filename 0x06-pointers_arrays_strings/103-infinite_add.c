@@ -1,59 +1,56 @@
 #include "main.h"
-#include <stdio.h>
+
 /**
- * infinite_add - add 2 strings.
- * @n1: string1.
- * @n2: string2.
- * @r: buffer
- * @size_r: buffer size
- * Return: String with all letters in ROT13 base.
+ * infinite_add - Adds two numbers represented as strings.
+ *
+ * @n1: The first number as a string
+ * @n2: The second number as a string
+ * @r: The buffer to store the result
+ * @size_r: The size of the buffer
+ *
+ * Return: A pointer to the result (r) or 0 if result cannot be stored in r.
  */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-	int a_len = 0, b_len = 0, carry = 0, a, b, sum, biggest;
-	
-	while (n1[a_len] != '\0')
-		a_len++;
-	while (n2[b_len] != '\0')
-		b_len++;
-	if (a_len > b_len)
-		biggest = a_len;
-	else
-		biggest = b_len;
-	if ((biggest + 1) >= size_r)
-		return (0);
-	r[biggest + 1] = '\0';
-	
-	while (biggest >= 0)
-	{
-		a = (n1[a_len - 1] - '0');
-		b = (n1[b_len - 1] - '0');
-		if (a_len > 0 && b_len > 0)
-			sum = a + b + carry;
-		else if (a_len < 0 && b_len > 0)
-			sum = b + carry;
-		else if (a_len > 0 && b_len < 0)
-			sum = a + carry;
-		else
-			sum = carry;
-		
-		if (sum > 9)
-		{
-			carry = sum / 10;
-			sum = (sum % 10) + '0';
-		}
-		else
-		{
-			carry = 0;
-			sum = sum + '0';
-		}
-		r[biggest] = sum;
-		a_len--;
-		b_len--;
-		biggest--;
-	}
-	if (*(r) != 0)
-		return (r);
-	else
-		return (r + 1);
+    int len1, len2, i, sum, carry;
+
+    len1 = 0;
+    while (n1[len1] != '\0')
+        len1++;
+
+    len2 = 0;
+    while (n2[len2] != '\0')
+        len2++;
+
+    carry = 0;
+    for (i = 0; i < size_r - 1; i++)
+    {
+        int digit1 = (len1 - 1 >= 0) ? (n1[len1 - 1] - '0') : 0;
+        int digit2 = (len2 - 1 >= 0) ? (n2[len2 - 1] - '0') : 0;
+
+        sum = digit1 + digit2 + carry;
+        carry = sum / 10;
+        r[i] = (sum % 10) + '0';
+
+        if (len1 > 0)
+            len1--;
+
+        if (len2 > 0)
+            len2--;
+    }
+
+    r[i] = '\0';
+
+    if (carry == 1 && i == size_r - 1)
+        return (0);
+
+    for (i = 0; i < size_r / 2; i++)
+    {
+        char tmp = r[i];
+        r[i] = r[size_r - 1 - i];
+        r[size_r - 1 - i] = tmp;
+    }
+
+    return (r);
 }
+
